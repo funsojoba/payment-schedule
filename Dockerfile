@@ -28,16 +28,6 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
-# Install Python packages
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy the rest of the application code
 COPY . .
-
-# Copy wait-for-it script
-# COPY wait-for-it.sh /app/wait-for-it.sh
-# RUN chmod +x /app/wait-for-it.sh
-# Command to run the application
-
-# CMD ["./wait-for-it.sh", "db:5432", "--", "gunicorn", "CORE.wsgi:application", "--bind", "0.0.0.0:8000"]

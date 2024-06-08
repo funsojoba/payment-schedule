@@ -4,6 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from drf_yasg.utils import swagger_auto_schema
+
 from django.contrib.auth.hashers import check_password
 
 from .models import User
@@ -19,6 +21,12 @@ class AuthViewSet(viewsets.ViewSet):
     API endpoint that allows users perform authentications.
     """
 
+    @swagger_auto_schema(
+        operation_description="Sign Up User",
+        operation_summary="Sign Up User",
+        tags=["Auth"],
+        request_body=SignUpSerializer,
+    )
     @action(methods=['post'], detail=False)
     def sign_up(self, request):
         """
@@ -34,6 +42,12 @@ class AuthViewSet(viewsets.ViewSet):
 
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
+    @swagger_auto_schema(
+        operation_description="Log In User",
+        operation_summary="Log In User",
+        tags=["Auth"],
+        request_body=LogInSerializer,
+    )
     @action(methods=['post'], detail=False)
     def log_in(self, request):
         """

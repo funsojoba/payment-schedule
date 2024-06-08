@@ -21,7 +21,7 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - rider_network
+      - pay_network
 
   db:
     image: postgis/postgis:13-3.1
@@ -35,7 +35,7 @@ services:
     ports:
       - "5433:5432"
     networks:
-      - rider_network
+      - pay_network
 
   redis:
     image: redis:6.2
@@ -56,38 +56,38 @@ services:
       - web
       - redis
     networks:
-      - rider_network
+      - pay_network
     environment:
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
     env_file:
       - .env
 
-  # celery_beat:
-  #   build: .
-  #   command:
-  #     [
-  #       'celery',
-  #       '--app=CORE',
-  #       'beat',
-  #       '--scheduler=django_celery_beat.schedulers:DatabaseScheduler',
-  #       '--loglevel=INFO',
-  #     ]
-  #   volumes:
-  #     - ./:/app
-  #   networks:
-  #     - rider_network
-  #   links:
-  #     - web
-  #     - db
-  #     - redis
-  #   depends_on:
-  #     - web
-  #     - db
-  #     - redis
-  #   environment:
-  #     - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-  #   env_file:
-  #     - .env
+  celery_beat:
+    build: .
+    command:
+      [
+        'celery',
+        '--app=CORE',
+        'beat',
+        '--scheduler=django_celery_beat.schedulers:DatabaseScheduler',
+        '--loglevel=INFO',
+      ]
+    volumes:
+      - ./:/app
+    networks:
+      - pay_network
+    links:
+      - web
+      - db
+      - redis
+    depends_on:
+      - web
+      - db
+      - redis
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+    env_file:
+      - .env
 
   mailhog:
     image: mailhog/mailhog:latest
@@ -101,5 +101,5 @@ volumes:
   redis_data:
 
 networks:
-  rider_network:
+  pay_network:
     driver: bridge
