@@ -1,5 +1,5 @@
 from typing import List
-from .tasks import send_mail_async
+from .task import send_mail_async
 
 
 class EmailService:

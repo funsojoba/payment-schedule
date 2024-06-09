@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from .models import Payment, Wallet
+from .models import Payment, Wallet, ScheduledPayment
 
 
-
-class SchedulePaymentSerializer(serializers.Serializer):
+class PostSchedulePaymentSerializer(serializers.Serializer):
     """
     Serializer for scheduling a payment.
     """
@@ -18,15 +17,27 @@ class PaymentSerializer(serializers.ModelSerializer):
     """
     Serializer for payments.
     """
+
     class Meta:
         model = Payment
-        fields = '__all__'
+        fields = "__all__"
 
 
 class WalletSerializer(serializers.ModelSerializer):
     """
     Serializer for wallets.
     """
+
     class Meta:
         model = Wallet
-        fields = '__all__'
+        fields = "__all__"
+
+
+class SchedulePaymentSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Scheduled Payment model
+    """
+
+    class Meta:
+        models = ScheduledPayment
+        fields = "__all__"
