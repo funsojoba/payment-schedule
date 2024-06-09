@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,14 +160,16 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_BROKER_URL = config("REDIS_URL", default="redis://redis:6379/0")
 CELERY_MAX_RETRY = ""
 CELERY_RETRY_DELAY = ""
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_TIMEZONE = 'UTC'
 
 REDIS_CONNECTION_URL = config("REDIS_URL", default="redis://redis:6379/0")
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_CONNECTION_URL,
-        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-    }
+
+CELERY_BEAT_SCHEDULE = {
+    'check-scheduled-payments-every-morning': {
+        'task': 'your_app_name.tasks.check_scheduled_payments',
+        'schedule': crontab(hour=0, minute=0),  # Every day at midnight UTC
+    },
 }
 
 SIMPLE_JWT = {
