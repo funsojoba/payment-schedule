@@ -19,11 +19,8 @@ services:
       - pay_network
 
   redis:
-    image: redis:6.2
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+    image: redis:alpine
+    container_name: scheduler_redis
 
   celery:
     build: .
@@ -33,15 +30,6 @@ services:
     depends_on:
       - web
       - redis
-    links:
-      - web
-      - redis
-    networks:
-      - pay_network
-    environment:
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-    env_file:
-      - .env
 
   celery_beat:
     build: .
@@ -55,18 +43,9 @@ services:
       ]
     volumes:
       - ./:/app
-    networks:
-      - pay_network
-    links:
-      - web
-      - redis
     depends_on:
       - web
       - redis
-    environment:
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-    env_file:
-      - .env
 
   mailhog:
     image: mailhog/mailhog:latest

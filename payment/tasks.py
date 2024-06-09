@@ -1,3 +1,4 @@
+from django.utils import timezone
 from celery import shared_task
 from notification.service import EmailService
 
@@ -5,9 +6,12 @@ from payment.models import ScheduledPayment
 from payment.utils import PaymentUtil
 
 
-@shared_task(bind=True)
+@shared_task(bind=True, name="task.make-scheduled-payment")
 def schedule_payment() -> None:
-    all_scheduled_payment = ScheduledPayment.objects.filter(status="scheduled")
+    today = timezone.now().date()
+    all_scheduled_payment = ScheduledPayment.objects.filter(
+        status="scheduled", schedule_date__date=today
+    )
 
     for scheduled_payment in all_scheduled_payment:
         amount = scheduled_payment.amount
