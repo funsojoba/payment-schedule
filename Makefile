@@ -12,7 +12,7 @@ up-build:
 	$(COMPOSE) up --build
 
 build:
-	$(COMPOSE) build
+	$(COMPOSE) build --no-cache
 
 up-d:
 	$(COMPOSE) up -d

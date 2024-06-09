@@ -199,3 +199,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
+
+PAYSTACK_PUBLIC_KEY=config("PAYSTACK_PUBLIC_KEY", default="")
+PAYSTACK_SECRET_KEY=config("PAYSTACK_SECRET_KEY", default="")

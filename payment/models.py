@@ -38,6 +38,20 @@ class Payment(models.Model):
 
 
 
+class ScheduledPayment(models.Model):
+    id = models.CharField(
+        primary_key=True, editable=False, default=generate_id, max_length=70
+    )
+    payment = models.ForeignKey(
+        'payment.Payment', on_delete=models.CASCADE, related_name='scheduled_payments')
+    user = models.ForeignKey(
+        'authentication.User',
+        on_delete=models.CASCADE,
+        related_name='scheduled_payments'
+    )
+
+
+
 class Wallet(models.Model):
     """
     Model for storing wallets.

@@ -8,32 +8,13 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    links:
-      - db
     environment:
       - CELERY_BROKER=${CELERY_BROKER_URL}
       - CELERY_BACKEND=${CELERY_BROKER_URL}
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASS}@db:5432/${POSTGRES_DB}
     env_file:
       - .env
     stdin_open: true
     tty: true
-    networks:
-      - pay_network
-
-  db:
-    image: postgis/postgis:13-3.1
-    container_name: rider_postgres
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASS}
-      - POSTGRES_DB=${POSTGRES_DB}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
     networks:
       - pay_network
 
@@ -78,11 +59,9 @@ services:
       - pay_network
     links:
       - web
-      - db
       - redis
     depends_on:
       - web
-      - db
       - redis
     environment:
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}

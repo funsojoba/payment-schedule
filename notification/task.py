@@ -6,9 +6,10 @@ from notification.utils import EmailManager
 
 @shared_task(
     bind=True,
+    autoretry_for=(smtplib.SMTPException,),
 )
-def schedule_payment(
-    self, 
+def send_mail_async(
+    self, template, recipients: List[str], subject: str, context: Dict
 ):
     mail = EmailManager(
         template=template,
