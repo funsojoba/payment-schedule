@@ -38,6 +38,8 @@ class SchedulePaymentSerializer(serializers.ModelSerializer):
     Serializer for Scheduled Payment model
     """
 
+    schedule_date = serializers.DateTimeField(format="%B %d, %Y, %I:%M %p")
+
     class Meta:
-        models = ScheduledPayment
+        model = ScheduledPayment
         fields = "__all__"

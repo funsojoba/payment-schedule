@@ -102,6 +102,9 @@ class PaymentView(viewsets.ViewSet):
         scheduled_payments = ScheduledPayment.objects.filter(
             user=request.user, status="scheduled"
         )
+        total_scheduled_payment = (
+            scheduled_payments.aggregate(total=Sum("amount"))["total"] or 0
+        )
         return Response(
             status=status.HTTP_200_OK,
             data={
@@ -109,6 +112,7 @@ class PaymentView(viewsets.ViewSet):
                 "data": SchedulePaymentSerializer(
                     scheduled_payments, many=True
                 ).data,
+                "total_scheduled_payment": total_scheduled_payment,
             },
         )
 
