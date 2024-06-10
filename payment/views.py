@@ -18,7 +18,7 @@ from .serializer import (
 
 from .models import Wallet, ScheduledPayment
 
-from notification.service import EmailService
+# from notification.service import EmailService
 
 
 class PaymentView(viewsets.ViewSet):
@@ -72,17 +72,17 @@ class PaymentView(viewsets.ViewSet):
                 amount=amount, user=request.user, schedule_date=schedule_date
             )
 
-            EmailService.send_async(
-                template="payment_scheduled.html",
-                subject="Payment Scheduled Successfully",
-                recipients=[request.user.email],
-                context={
-                    "name": request.user.display_name,
-                    "currency": wallet.currency,
-                    "amount": amount,
-                    "schedule_date": schedule_date,
-                },
-            )
+            # EmailService.send_async(
+            #     template="payment_scheduled.html",
+            #     subject="Payment Scheduled Successfully",
+            #     recipients=[request.user.email],
+            #     context={
+            #         "name": request.user.display_name,
+            #         "currency": wallet.currency,
+            #         "amount": amount,
+            #         "schedule_date": schedule_date,
+            #     },
+            # )
 
             return Response(
                 status=status.HTTP_200_OK,
