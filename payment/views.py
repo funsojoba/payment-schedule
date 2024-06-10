@@ -101,7 +101,7 @@ class PaymentView(viewsets.ViewSet):
         """
         scheduled_payments = ScheduledPayment.objects.filter(
             user=request.user, status="scheduled"
-        )
+        ).order_by("schedule_date")
         total_scheduled_payment = (
             scheduled_payments.aggregate(total=Sum("amount"))["total"] or 0
         )
